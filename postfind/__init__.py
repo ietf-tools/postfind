@@ -3,7 +3,7 @@
 
 from __future__ import print_function, unicode_literals, absolute_import, division
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 __date__    = "$Date:$"
 

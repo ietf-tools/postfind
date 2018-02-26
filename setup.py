@@ -72,7 +72,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version=postfind.__version__,
 
-    description="Follow a message (by Message-ID) in postfix logs"
+    description="Follow a message (by Message-ID) in postfix logs",
     long_description=readme + '\n\n' + changelog_excerpt,
 
     # The project's main homepage.

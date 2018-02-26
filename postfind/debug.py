@@ -7,7 +7,7 @@ try:
     logger = syslog.syslog
 except ImportError:                     # import syslog will fail on Windows boxes
     import logging
-    logging.basicConfig(filename='tracker.log',level=logging.INFO)
+    logging.basicConfig(filename='tracker.log', level=logging.INFO)
     logger = logging.info
 
 try:
@@ -34,8 +34,10 @@ debug = False
 _report_indent = [4]
 _mark = [ timeutils.time() ]
 
+
 def set_indent(i):
     _report_indent[0] = i
+
 
 def trace(fn):                 # renamed from 'report' by henrik 16 Jun 2011
     """Decorator to print information about a function
@@ -45,14 +47,15 @@ def trace(fn):                 # renamed from 'report' by henrik 16 Jun 2011
     again along with the return value when the function
     returns.
     """
-    def fix(s,n=64):
+    def fix(s, n=64):
         import re
         s = re.sub(r'\\t', ' ', s)
         s = re.sub(r'\s+', ' ', s)
         if len(s) > n+3:
             s = s[:n]+"..."
         return s
-    def wrap(fn, *params,**kwargs):
+
+    def wrap(fn, *params, **kwargs):
         call = wrap.callcount = wrap.callcount + 1
 
         indent = ' ' * _report_indent[0]
@@ -61,7 +64,7 @@ def trace(fn):                 # renamed from 'report' by henrik 16 Jun 2011
         fu = "%s.%s()" % (fn.__module__, fn.__name__)               # function name
         fc = "%s(%s)" % (fn.__name__, ', '.join(                    # function call
             [fix(repr(a)) for a in params] +
-            ["%s = %s" % (a, fix(repr(b))) for a,b in kwargs.items()]
+            ["%s = %s" % (a, fix(repr(b))) for (a, b) in kwargs.items()]
         ))
 
         if debug:
@@ -69,7 +72,7 @@ def trace(fn):                 # renamed from 'report' by henrik 16 Jun 2011
                 (indent, fi, indent, co, indent, fu, indent, fc, call))
         _report_indent[0] += increment
         mark = timeutils.time()
-        ret = fn(*params,**kwargs)
+        ret = fn(*params, **kwargs)
         tau = timeutils.time() - mark
         _report_indent[0] -= increment
         if debug:
@@ -82,6 +85,7 @@ def trace(fn):                 # renamed from 'report' by henrik 16 Jun 2011
         return decorator(wrap, fn)
     else:
         return fn
+
 
 def mark():
     _mark[0] = timeutils.time()
@@ -99,13 +103,13 @@ def clock(s):
 def time(fn):
     """Decorator to print timing information about a function call.
     """
-    def wrap(fn, *params,**kwargs):
+    def wrap(fn, *params, **kwargs):
 
         indent = ' ' * _report_indent[0]
         fc = "%s.%s()" % (fn.__module__, fn.__name__,)
 
         mark = timeutils.time()
-        ret = fn(*params,**kwargs)
+        ret = fn(*params, **kwargs)
         tau = timeutils.time() - mark
         sys.stderr.write("%s| %s | %.3fs\n" % (indent, fc, tau))
 

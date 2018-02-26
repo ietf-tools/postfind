@@ -25,39 +25,31 @@ COPYRIGHT
   for details.
 """
 
-
 from __future__ import print_function, unicode_literals, division
 
-try:
-    import debug
-    debug.debug = True
-except ImportError:
-    pass
-
-try:
-    from pprint import pformat
-except ImportError:
-    pformat = lambda x: x
-
-_prolog, _middle, _epilog = __doc__.split('...')
-
-class Options(object):
-    def __init__(self, **kwargs):
-        for k,v in kwargs.items():
-            if not k.startswith('__'):
-                setattr(self, k, v)
-    pass
-
-# ----------------------------------------------------------------------
-#
-# This is the entrypoint which is invoked from command-line scripts:
-
 import argparse
+import debug
 import os
 import sys
 import postfind
 
+from postfind.finder import find
 from pathlib2 import Path
+
+_prolog, _middle, _epilog = __doc__.split('...')
+
+
+class Options(object):
+    def __init__(self, **kwargs):
+        for (k, v) in kwargs.items():
+            if not k.startswith('__'):
+                setattr(self, k, v)
+    pass
+
+
+# ----------------------------------------------------------------------
+#
+# This is the entrypoint which is invoked from command-line scripts:
 
 def run():
 
@@ -70,8 +62,8 @@ def run():
     # Parse config file
     # default values
     conf = {
-        }
-    for p in ['.', os.environ.get('HOME','.'), '/etc/', ]:
+    }
+    for p in ['.', os.environ.get('HOME', '.'), '/etc/', ]:
         rcpath = Path(p)
         if rcpath.exists():
             rcfn = rcpath / ('.%src'%(program,))
@@ -127,10 +119,10 @@ def run():
     group.add_argument('-V', '--version', action='version', version='%s %s'%(program, postfind.__version__),
                                                                         help="output version information, then exit")
     group.add_argument('-v', '--verbose', action='store_true',          help="be (slightly) more verbose")
-    group.add_argument('-t', '--timeout', type=int, default=default_tout,help="with --follow: how long to follow (default %ds)"%(default_tout,))
+    group.add_argument('-t', '--timeout', type=int, default=default_tout,
+                                            help="with --follow: how long to follow (default %ds)"%(default_tout,))
 
     options = parser.parse_args(namespace=options)
-
 
     if options.debug:
         note('options: %s' % options.__dict__)
@@ -148,7 +140,7 @@ def run():
 
     try:
         say("Looking for Message-ID: %s\n" % id)
-        lines = postfind.find(id, files, options)
+        lines = find(id, files, options)
         for l in lines:
             print(l.rstrip())
     except KeyboardInterrupt as e:
@@ -161,6 +153,7 @@ def run():
     except Exception as e:
         raise
         die(e)
+
 
 if __name__ == '__main__':
     run()

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-# --------------------------------------------------
-# Copyright The IETF Trust 2011, All Rights Reserved
-# --------------------------------------------------
+# -*- coding: utf-8 -*-
+# Copyright The IETF Trust 2018, All Rights Reserved
+
+from __future__ import print_function, unicode_literals, division
 
 import re
 
@@ -27,7 +28,7 @@ def parse(changelog):
     #
     entries = []
     if type(changelog) == type(''):
-        changelog = open(changelog)
+        changelog = open(changelog, encoding='utf-8')
     for line in changelog:
         if re.match(ver_line, line):
             package, version, rest = re.match(ver_line, line).groups()

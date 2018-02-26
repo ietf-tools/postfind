@@ -1,4 +1,5 @@
 config
+decorator
 tailer
 pathlib2
 

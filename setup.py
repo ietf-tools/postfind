@@ -91,16 +91,16 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
         # 'Intended Audience :: Other Audience',
         'Intended Audience :: Developers',
+        'Topic :: Communications :: Email',
+        'Topic :: Communications :: Email :: Mail Transport Agents',
 
         # Pick your license as you wish (should match "license" above)
         'License :: OSI Approved :: BSD License',
-        # 'Topic :: Text Processing',
-        # 'Topic :: Text Processing :: Markup :: XML',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.

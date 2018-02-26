@@ -1,3 +1,9 @@
+postfind (0.1.2) ietf; urgency=medium
+
+  * Flake8 fixes
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  26 Feb 2018 05:53:43 -0800
+
 postfind (0.1.1) ietf; urgency=medium
 
   * Corrected the short project description

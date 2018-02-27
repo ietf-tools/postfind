@@ -139,7 +139,7 @@ def run():
         die("Cannot follow a .gz file")
 
     try:
-        say("Looking for Message-ID: %s\n" % id)
+        note("Looking for Message-ID: %s\n" % id)
         lines = find(id, files, options)
         for l in lines:
             print(l.rstrip())

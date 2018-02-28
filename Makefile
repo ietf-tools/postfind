@@ -64,6 +64,10 @@ coverage: ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
+manpage: install
+	postfind --help | sed -e :a -e '$!N;s/\n      / /;ta' -e 'P;D' | txt2man -t postfind -s 8 > postfind.8
+	
+
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/postfind.rst
 	rm -f docs/modules.rst
@@ -76,8 +80,8 @@ servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: clean ## package and upload a release
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+	python setup.py sdist upload --sign
+	python setup.py bdist_wheel upload --sign
 
 dist: clean ## builds source and wheel package
 	python setup.py sdist

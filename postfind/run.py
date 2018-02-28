@@ -12,6 +12,14 @@ DESCRIPTION
   Given a Message-ID and one or more postfix log files as arguments, try to
   identify and follow the message's movement through the postfix pipeline.
 
+  In some cases, such as with mailman lists, there may be multiple groups of
+  log lines for a given Message-ID: the first will complete with delivery to
+  mailman, and the second will start when mailman sends to a list of
+  subscribers, and end with the last delivery to the list. In order to
+  capture both groups, use -n 2 (or larger, as needed). Use -n 0 to read to
+  end of file, or till timeout when using --follow.
+  
+
 OPTIONS
 ...
 
@@ -19,7 +27,7 @@ AUTHOR
   Written by Henrik Levkowetz, <henrik@levkowetz.com>
 
 COPYRIGHT
-  Copyright (c) 2018, The IETF Trust.  All rights reserved.
+  Copyright (c) 2018, The IETF Trust. All rights reserved.
 
   Licenced under the 3-clause BSD license; see the file LICENSE
   for details.
@@ -115,12 +123,13 @@ def run():
     group.add_argument('-d', '--debug', action='store_true',            help="turn on debugging")
     group.add_argument('-f', '--follow', action='store_true',           help="follow file from just before end of file")
     group.add_argument('-h', '--help', action='help',                   help="show this help message and exit")
+    group.add_argument('-n', '--count', type=int, default=1,            help="look for COUNT instances of ID match followed by completed delivery (default 1)")
     group.add_argument('-q', '--quiet', action='store_true',            help="be more quiet")
+    group.add_argument('-t', '--timeout', type=int, default=default_tout,
+                                            help="with --follow: how long to follow (default %ds)"%(default_tout,))
     group.add_argument('-V', '--version', action='version', version='%s %s'%(program, postfind.__version__),
                                                                         help="output version information, then exit")
     group.add_argument('-v', '--verbose', action='store_true',          help="be (slightly) more verbose")
-    group.add_argument('-t', '--timeout', type=int, default=default_tout,
-                                            help="with --follow: how long to follow (default %ds)"%(default_tout,))
 
     options = parser.parse_args(namespace=options)
 
@@ -139,7 +148,8 @@ def run():
         die("Cannot follow a .gz file")
 
     try:
-        note("Looking for Message-ID: %s\n" % id)
+        if options.verbose:
+            say("Looking for Message-ID: %s\n" % id)
         lines = find(id, files, options)
         for l in lines:
             print(l.rstrip())
